@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import com.example.LoginAPI.entities.Users;
-
 @Component
 public class UserDao {
 
@@ -16,25 +14,25 @@ public class UserDao {
 	private JdbcTemplate jdbctemplate;
 
 	// create user
-	public boolean createUser(Users user) {
-		String selectQuery = "Select count(*) from user where user_name='" + user.getUsername() + "'";
-		System.out.println("selectQuery: " + selectQuery);
+	public boolean createUser(String username, String password) {
+		String selectQuery = "Select count(*) from user where user_name='" + username + "'";
+		//System.out.println("selectQuery: " + selectQuery);
 		SqlRowSet srowset = jdbctemplate.queryForRowSet(selectQuery);
 
 		int size = 0;
 		if (srowset.next()) {
 			size = srowset.getInt(1);
 		}
-		System.out.println("size: " + size);
+		//System.out.println("size: " + size);
 
 		boolean isUserPresent = false;
 		if (size > 0) {
 			isUserPresent = true;
 		} else {
-			String query = "INSERT into user (user_name,password) values ('" + user.getUsername() + "','" + user.getPassword() + "')";
+			String query = "INSERT into user (user_name,password) values ('" + username + "','" + password + "')";
 			jdbctemplate.execute(query);
 		}
-		System.out.println("isUserPresent: "+isUserPresent);
+		//System.out.println("isUserPresent: "+isUserPresent);
 		return isUserPresent;
 	}
 
@@ -43,15 +41,13 @@ public class UserDao {
 
 		String selectQuery = "Select count(*) from user where user_name='" + username + "' and password='" + password
 				+ "'";
-		// System.out.println("selectQuery: " + selectQuery);
 		SqlRowSet srowset = jdbctemplate.queryForRowSet(selectQuery);
 
 		int size = 0;
 		if (srowset.next()) {
 			size = srowset.getInt(1);
 		}
-		// System.out.println("size: " + size);
-
+		
 		boolean isUpdated = false;
 		if (size > 0) {
 			long sessionid = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis());
@@ -60,7 +56,6 @@ public class UserDao {
 			jdbctemplate.execute(query);
 			isUpdated = true;
 		}
-		// System.out.println("isUpdated: " + isUpdated);
 		return isUpdated;
 
 	}

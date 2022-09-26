@@ -2,8 +2,8 @@ package com.example.LoginAPI.entities;
 
 public class Users {
 
-    private String username;
-    private String password;
+    public String username;
+    public String password;
 
     //making constructor
     public Users(String username, String password) {
@@ -11,7 +11,7 @@ public class Users {
         this.password = password;
     }
 
-    //adding default constructor with super class
+//    adding default constructor with super class
     public Users(){
         super();
     }
